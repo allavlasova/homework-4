@@ -18,13 +18,19 @@ class MedicamentsTest(unittest.TestCase):
         self.page.open()
 
     def test_search(self):
-        query = u'ВИЗАРСИН, таблетки'
+        query = u'ВИЗАРСИН'
         self.page.search_form.search_medicament(query)
         self.page.search_form.submit()
         list = self.page.resultlist
-        suggested_titles = list.items_titles()
-        self.assertIn(query, suggested_titles)
+        self.assertTrue(list.is_present())
+        titles = list.items_titles()
+        self.assertIn(query, titles)
 
+    def test_search_for_non_existent_drug(self):
+        query = u'несуществующиетаблетки'
+        self.page.search_form.search_medicament(query)
+        self.page.search_form.submit()
+        self.assertFalse(self.page.resultlist.is_present())
 
 
     def tearDown(self):

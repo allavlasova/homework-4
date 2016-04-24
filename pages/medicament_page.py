@@ -40,7 +40,7 @@ class SearchForm(Component):
 
 class ResultList(Page):
     #ITEM = '.entry_medicament'
-    ITEM = '//div[@class="entry_medicament"]'
+    ITEM = '//div[contains(@class,"entry_medicament")]'
     #TITLE = '.entry__name'
     #TITLE = '//div[@class="entry_medicament"]'
 
@@ -48,7 +48,6 @@ class ResultList(Page):
         try:
             wait = WebDriverWait(self.driver, 10)
             wait.until(
-                #expected_conditions.presence_of_element_located((By.CSS_SELECTOR, self.ITEM))
                 expected_conditions.presence_of_element_located((By.XPATH, self.ITEM))
             )
             return True
@@ -57,11 +56,11 @@ class ResultList(Page):
 
     def items_titles(self):
         items = self.items()
-        return [item.text for item in items]
+        return [item.text.split(',')[0] for item in items]
 
     def items(self):
-        self.is_present()
-        return self.driver.find_elements_by_css_selector('a.entry__link.link-holder')
+        a = self.is_present()
+        return self.driver.find_element_by_xpath('//div[contains(@class,"column__air")]').find_elements_by_xpath('//div[contains(@class,"entry_medicament")]')#find_elements_by_xpath('//a[contains(@class,"entry__link")]')
 
 
 
