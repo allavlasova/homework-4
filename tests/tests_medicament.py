@@ -22,15 +22,24 @@ class MedicamentsTest(unittest.TestCase):
         self.page.search_form.search_medicament(query)
         self.page.search_form.submit()
         list = self.page.resultlist
-        self.assertTrue(list.is_present())
+        self.assertFalse(self.page.resultlist.is_empty())
         titles = list.items_titles()
         self.assertIn(query, titles)
+
+    def test_search_by_eng(self):
+        query = 'VIZARSIN'
+        self.page.search_form.search_medicament(query)
+        self.page.search_form.submit()
+        list = self.page.resultlist
+        self.assertFalse(self.page.resultlist.is_empty())
+        titles = list.items_titles()
+        self.assertIn(u'ВИЗАРСИН', titles)
 
     def test_search_for_non_existent_drug(self):
         query = u'несуществующиетаблетки'
         self.page.search_form.search_medicament(query)
         self.page.search_form.submit()
-        self.assertFalse(self.page.resultlist.is_present())
+        self.assertTrue(self.page.resultlist.is_empty())
 
 
     def tearDown(self):

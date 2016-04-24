@@ -58,6 +58,13 @@ class ResultList(Page):
         items = self.items()
         return [item.text.split(',')[0] for item in items]
 
+    def is_empty(self):
+        items = self.items()
+        if len(items) == 0:
+            return True
+        else:
+            return False
+
     def items(self):
         a = self.is_present()
         return self.driver.find_element_by_xpath('//div[contains(@class,"column__air")]').find_elements_by_xpath('//div[contains(@class,"entry_medicament")]')#find_elements_by_xpath('//a[contains(@class,"entry__link")]')
