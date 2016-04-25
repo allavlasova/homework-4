@@ -41,7 +41,6 @@ class MedicamentsTest(unittest.TestCase):
         self.page.search_form.submit()
         self.assertTrue(self.page.resultlist.is_empty())
 
-
     def tearDown(self):
         self.page.close()
         self.driver.quit()
