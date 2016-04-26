@@ -2,7 +2,7 @@
 __author__ = 'alla'
 import os
 import unittest
-from pages.medicament_page import MedicamentPage
+from pages.medicaments_page import MedicamentsPage
 
 from selenium.webdriver import DesiredCapabilities, Remote
 
@@ -14,7 +14,7 @@ class MedicamentsTest(unittest.TestCase):
             command_executor='http://127.0.0.1:4444/wd/hub',
             desired_capabilities=getattr(DesiredCapabilities, browser).copy()
         )
-        self.page = MedicamentPage(self.driver)
+        self.page = MedicamentsPage(self.driver)
         self.page.open()
 
     def test_search(self):
