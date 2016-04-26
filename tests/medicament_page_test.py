@@ -23,11 +23,11 @@ class MedicamentPageTest(unittest.TestCase):
 
     def test_buy(self):
         self.page.contraindication.to_order()
-        self.page.contraindication.selected_type(1)
+        type = self.page.contraindication.selected_type(1)
         self.page.contraindication.increment()
         self.page.contraindication.do_order()
         self.page.wait_for_another_page()
-        self.assertTrue(self.page.contraindication.check_basket())
+        self.assertEquals(type, self.page.contraindication.check_basket())
 
     def test_bay_increment(self):
         self.page.contraindication.to_order()

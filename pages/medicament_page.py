@@ -34,8 +34,9 @@ class Contraindications(Component):
         WebDriverWait(self.driver, 10).until(
             expected_conditions.element_to_be_clickable((By.XPATH, "//div[@class='dropdown__inner dropdown__inner_dark dropdown__inner_collapse']/div/span/span[@class='dropdown__item__label table__cell'][%s]" % n))
         )
+        type = self.driver.find_element_by_xpath("//div[@class='dropdown__inner dropdown__inner_dark dropdown__inner_collapse']/div/span/span[@class='dropdown__item__label table__cell'][%s]" % n).text
         self.driver.find_element_by_xpath("//div[@class='dropdown__inner dropdown__inner_dark dropdown__inner_collapse']/div/span/span[@class='dropdown__item__label table__cell'][%s]" % n).click()
-
+        return type
 
     def increment(self):
         WebDriverWait(self.driver, 10).until(
@@ -53,10 +54,6 @@ class Contraindications(Component):
         self.driver.find_element_by_xpath("//div[@class='button__text'][text()='Оформить заказ']").click()
 
     def check_basket(self):
-        try:
-            item = self.driver.find_element_by_xpath("//div[@class='entry entry_medicament']/div[@class='table__cell']/div[@class='entry__name']")
-            return True
-        except Exception as e:
-            print(e)
-            return False
+        item = self.driver.find_element_by_xpath("//div[@class='entry entry_medicament']/div[@class='table__cell']/div[@class='entry__name']")
+        return item.text
 
