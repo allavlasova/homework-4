@@ -21,15 +21,14 @@ class MedicamentsClassificationTest(unittest.TestCase):
 
     def test_drug_type_selection(self):
         text = u"Витамины"
-        self.classification_list.go_to(text)
+        self.classification_list.to_link(text)
         self.page.wait_for_another_page()
         self.assertEquals(text, self.classification_list.get_title())
         self.driver.back()
         text = u"Миорелаксанты"
-        self.classification_list.go_to(text)
+        self.classification_list.to_link(text)
         self.page.wait_for_another_page()
         self.assertEquals(text, self.classification_list.get_title())
-
 
     def tearDown(self):
         self.page.close()

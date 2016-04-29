@@ -8,15 +8,10 @@ from selenium.common.exceptions import TimeoutException
 
 class MedicamentsPage(Page):
     PATH = '/drug/'
-    HDR_XPATH = '//span[contains(@class, "input__decorator")]'
 
     @property
     def search_form(self):
         return SearchForm(self.driver)
-
-    @property
-    def resultlist(self):
-        return ResultList(self.driver)
 
     @property
     def leaders_of_sells(self):
@@ -29,55 +24,50 @@ class MedicamentsPage(Page):
 
 
 class Classification(Component):
-    def go_to(self, text):
+    TITLE = '//h1[@class="page-info__title"]'
+
+    def to_link(self, text):
         WebDriverWait(self.driver, 10).until(expected_conditions.element_to_be_clickable((By.LINK_TEXT,text)))
         self.driver.find_element_by_link_text(text).click()
 
     def get_title(self):
-        title = self.driver.find_element_by_xpath('//h1[@class="page-info__title"]')
+        title = self.driver.find_element_by_xpath(self.TITLE)
         return title.text
 
 class LeadersOfSells(Component):
-    ITEMS = '//div[contains(@class,"columns columns_percent")]'
-    ITEM = '//div[contains(@class,"entry_medicament")]'
+    ALL_ITEMS = "//div[@class='columns columns_percent']"
+    ITEMS = "//div[@class='entry entry_medicament margin_bottom_30']//a[@class='entry__link link-holder']"
     TITLE = '//h1[@class="page-info__title"]'
-    ITEM_BY_NUMBER = '//div[contains(@class,"entry_medicament")][%s]'
 
-    def get_title(self):
-        title = self.driver.find_element_by_xpath(self.TITLE)
-        return title.text.split(',')[0]
+    def list_leaders_of_sells(self):
+        items = self.driver.find_element_by_xpath(self.ALL_ITEMS).find_elements_by_xpath(self.ITEMS)
+        return items
 
-    def get_drug_from_leaders_of_sells(self, text):
-        WebDriverWait(self.driver, 10).until(
-            expected_conditions.element_to_be_clickable((By.LINK_TEXT, text))
-        )
-        self.driver.find_element_by_link_text(text).click()
+    def get_drags_name(self, n):
+        return self.list_leaders_of_sells()[n].text
 
+    def go_to_drugs_page(self, title):
+        self.driver.find_element_by_link_text(title).click()
 
-
-
+    def result_drag(self):
+        result = self.driver.find_element_by_xpath(self.TITLE)
+        return result.text.split(',')[0]
 
 
 class SearchForm(Component):
     INPUT_FIELD = "input.input__field.js-suggest__input"
     SUBMIT_BUTTON = '//span[@class="button__inner"]'
+    ITEMS = '//div[contains(@class,"column__air")]'
+    ITEM = '//div[contains(@class,"entry_medicament")]'
 
     def search_medicament(self, text):
         self.driver.find_element_by_css_selector(self.INPUT_FIELD).send_keys(text)
-
-        #wait = WebDriverWait(self.driver, 15, 10)
 
     def submit(self):
         WebDriverWait(self.driver, 50).until(
             expected_conditions.element_to_be_clickable((By.XPATH, self.SUBMIT_BUTTON))
         )
         self.driver.find_element_by_xpath(self.SUBMIT_BUTTON).click()
-
-
-
-class ResultList(Page):
-    ITEMS = '//div[contains(@class,"column__air")]'
-    ITEM = '//div[contains(@class,"entry_medicament")]'
 
     def is_present(self):
         try:
@@ -103,6 +93,10 @@ class ResultList(Page):
     def items(self):
         self.is_present()
         return self.driver.find_element_by_xpath(self.ITEMS).find_elements_by_xpath(self.ITEM)
+
+
+
+
 
 
 

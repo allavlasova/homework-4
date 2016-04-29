@@ -8,7 +8,7 @@ from selenium.webdriver import DesiredCapabilities, Remote
 
 class MedicamentsTestLeadersOfSellsTest(unittest.TestCase):
     def setUp(self):
-        browser = os.environ.get('TTHA2BROWSER', 'CHROME')
+        browser = os.environ.get('HW4BROWSER', 'CHROME')
 
         self.driver = Remote(
             command_executor='http://127.0.0.1:4444/wd/hub',
@@ -19,21 +19,15 @@ class MedicamentsTestLeadersOfSellsTest(unittest.TestCase):
         self.list = self.page.leaders_of_sells
 
     def test_select_one_from_list(self):
-        title = u'РЕДУКСИН'
-        self.list.get_drug_from_leaders_of_sells(title)
+        drug = self.list.get_drags_name(2)
+        self.list.go_to_drugs_page(drug)
         self.page.wait_for_another_page()
-        self.assertEquals(title, self.list.get_title())
+        self.assertEquals(drug, self.list.result_drag())
         self.driver.back()
-        title = u'ФЛУОКСЕТИН'
-        self.list.get_drug_from_leaders_of_sells(title)
+        drug = self.list.get_drags_name(4)
+        self.list.go_to_drugs_page(drug)
         self.page.wait_for_another_page()
-        self.assertEquals(title, self.list.get_title())
-
-    def contraindications_test(self):
-        title = u'ВИЗАРСИН'
-        self.list.get_drug_from_leaders_of_sells(title)
-        self.page.wait_for_another_page()
-        self.list.contraindications(u'ВИЗАРСИН при беременности: Противопоказан')
+        self.assertEquals(drug, self.list.result_drag())
 
 
     def tearDown(self):
